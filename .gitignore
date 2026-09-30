@@ -1,0 +1,13 @@
+# Sensitive config
+appsettings.json
+.env
+
+# Build output
+bin/
+obj/
+
+# IDE/editor
+.vs/
+
+# Dependencies
+node_modules/

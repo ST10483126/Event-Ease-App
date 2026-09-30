@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - EventEaseApp</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/EventEaseApp.styles.css" asp-append-version="true" />
+    <style>
+        /* Fix scrolling issues - ensure page can scroll vertically */
+        html, body {
+        height: auto !important;
+        min-height: 100vh;
+        overflow-y: auto !important;
+        }
+
+        body {
+        margin-bottom: 0;
+        overflow-y: auto !important;
+        position: relative;
+        padding-bottom: 60px;
+        }
+
+        .container, .container-fluid {
+        max-width: 100% !important;
+        overflow-x: visible !important;
+        overflow-y: visible !important;
+        }
+
+        main {
+        overflow: visible !important;
+        min-height: calc(100vh - 150px);
+        padding-bottom: 2rem;
+        }
+
+        /* Ensure footer stays at bottom but doesn't block scrolling */
+        .footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        background-color: #f8f9fa;
+        padding: 1rem 0;
+        margin-top: 2rem;
+        }
+
+        /* For pages with lots of content, ensure they can scroll */
+        .table-card, .dashboard-container, .features-section {
+        overflow: visible !important;
+        margin-bottom: 2rem;
+        }
+
+        /* Ensure content doesn't get hidden behind footer */
+        .content-wrapper {
+        padding-bottom: 80px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!--
+    BOOTSTRAP 5 REFERENCE:
+    Navigation bar implemented using Bootstrap 5 navbar component
+    Source: Bootstrap Documentation - Navbar (2024)
+    URL: https://getbootstrap.com/docs/5.0/components/navbar/
+-->
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">EventEaseApp</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Events" asp-action="Index">Events</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Bookings" asp-action="Index">Bookings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Venues" asp-action="Index">Venues</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid" style="overflow: visible; flex: 1; min-height: calc(100vh - 200px);">
+        <main role="main" style="overflow: visible; min-height: calc(100vh - 200px); padding-bottom: 60px;">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2026 - EventEaseApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

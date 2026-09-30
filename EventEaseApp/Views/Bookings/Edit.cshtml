@@ -1,0 +1,126 @@
+﻿@model EventEaseApp.Models.Booking
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="page-header">
+    <div>
+        <h1 class="text-primary fw-bold mb-0">Edit Booking</h1>
+        <p class="page-subtitle">Update customer booking information</p>
+    </div>
+</div>
+
+<div class="container my-4">
+    <div class="card border-0 shadow-sm p-4 bg-white">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Bookingid" />
+
+            <!-- Booking Reference -->
+            <div class="mb-3">
+                <label asp-for="Bookingreference" class="form-label fw-bold text-secondary">Booking Reference</label>
+                <input asp-for="Bookingreference" class="form-control shadow-sm" />
+                <span asp-validation-for="Bookingreference" class="text-danger"></span>
+            </div>
+
+            <!-- Booking Date -->
+            <div class="mb-3">
+                <label asp-for="BookingDate" class="form-label fw-bold text-secondary">Booking Date</label>
+                <input asp-for="BookingDate" class="form-control shadow-sm" type="datetime-local" />
+                <span asp-validation-for="BookingDate" class="text-danger"></span>
+                <small class="text-muted d-block mt-1">Select the date and time for this booking</small>
+            </div>
+
+            <!-- Booking Status (Matches CHECK constraint values) -->
+            <div class="mb-3">
+                <label asp-for="BookingStatus" class="form-label fw-bold text-secondary">Status</label>
+                <select asp-for="BookingStatus" class="form-select shadow-sm">
+                    <option value="Pending">Pending</option>
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+                <span asp-validation-for="BookingStatus" class="text-danger"></span>
+            </div>
+
+            <!-- IsAvailable Toggle -->
+            <div class="mb-3">
+                <label asp-for="IsAvailable" class="form-label fw-bold text-secondary">Booking Status</label>
+                <select asp-for="IsAvailable" class="form-select shadow-sm">
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+                <span asp-validation-for="IsAvailable" class="text-danger"></span>
+                <small class="text-muted d-block mt-1">Set whether this booking is active</small>
+            </div>
+
+            <!-- Venue Lookup Assignment Selection Dropdown -->
+            <div class="mb-3">
+                <label asp-for="VenueId" class="form-label fw-bold text-secondary">Select Venue</label>
+                <select asp-for="VenueId" class="form-select shadow-sm" asp-items="ViewBag.VenueId"></select>
+                <span asp-validation-for="VenueId" class="text-danger"></span>
+            </div>
+
+            <!-- Event Lookup Assignment Selection Dropdown -->
+            <div class="mb-3">
+                <label asp-for="EventsId" class="form-label fw-bold text-secondary">Select Event</label>
+                <select asp-for="EventsId" class="form-select shadow-sm" asp-items="ViewBag.EventsId"></select>
+                <span asp-validation-for="EventsId" class="text-danger"></span>
+            </div>
+
+            <!-- Customer Name -->
+            <div class="mb-3">
+                <label asp-for="CustomerName" class="form-label fw-bold text-secondary">Customer Name</label>
+                <input asp-for="CustomerName" class="form-control shadow-sm" />
+                <span asp-validation-for="CustomerName" class="text-danger"></span>
+            </div>
+
+            <!-- Customer Contact Info -->
+            <div class="mb-4">
+                <label asp-for="CustomerContact" class="form-label fw-bold text-secondary">Customer Contact Details</label>
+                <input asp-for="CustomerContact" class="form-control shadow-sm" />
+                <span asp-validation-for="CustomerContact" class="text-danger"></span>
+            </div>
+
+            <!-- Management Form Action Submission Controls -->
+            <div class="d-flex align-items-center gap-3 mt-4">
+                <button type="submit" class="btn btn-primary px-4 shadow-sm">Save</button>
+                <a asp-action="Index" class="btn btn-outline-secondary px-4">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<style>
+    .page-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.75rem;
+        padding: 0 1rem;
+    }
+
+        .page-header h1 {
+            margin-bottom: 0.25rem;
+        }
+
+    .page-subtitle {
+        color: #6b7280;
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    .text-muted {
+        color: #6b7280 !important;
+        font-size: 0.75rem;
+    }
+</style>

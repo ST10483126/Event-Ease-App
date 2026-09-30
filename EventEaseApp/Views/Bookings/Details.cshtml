@@ -1,0 +1,88 @@
+﻿@model EventEaseApp.Models.Booking
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container my-4">
+    <div class="card border-0 shadow-sm p-4 bg-white">
+        <h1 class="text-primary fw-bold mb-4">Booking Details</h1>
+
+        <div class="row">
+            <div class="col-md-8">
+                <dl class="row mb-0">
+                    <!-- Booking Reference -->
+                    <dt class="col-sm-3 text-secondary fw-bold mb-3">
+                        @Html.DisplayNameFor(model => model.Bookingreference)
+                    </dt>
+                    <dd class="col-sm-9 text-dark mb-3">
+                        @Html.DisplayFor(model => model.Bookingreference)
+                    </dd>
+
+                    <!-- Booking Date -->
+                    <dt class="col-sm-3 text-secondary fw-bold mb-3">
+                        @Html.DisplayNameFor(model => model.BookingDate)
+                    </dt>
+                    <dd class="col-sm-9 text-dark mb-3">
+                        @Model.BookingDate?.ToString("yyyy-MM-dd HH:mm")
+                    </dd>
+
+                    <!-- Booking Status Badge -->
+                    <dt class="col-sm-3 text-secondary fw-bold mb-3">
+                        @Html.DisplayNameFor(model => model.BookingStatus)
+                    </dt>
+                    <dd class="col-sm-9 mb-3">
+                        @{
+                            var statusStyle = Model.BookingStatus?.ToLower() switch
+                            {
+                                "confirmed" or "completed" => "bg-success text-white",
+                                "pending" => "bg-warning text-dark",
+                                "cancelled" => "bg-danger text-white",
+                                _ => "bg-secondary text-white"
+                            };
+                        }
+                        <span class="badge @statusStyle px-2 py-1">@Model.BookingStatus</span>
+                    </dd>
+
+                    <!-- Customer Name -->
+                    <dt class="col-sm-3 text-secondary fw-bold mb-3">
+                        @Html.DisplayNameFor(model => model.CustomerName)
+                    </dt>
+                    <dd class="col-sm-9 text-dark mb-3">
+                        @Html.DisplayFor(model => model.CustomerName)
+                    </dd>
+
+                    <!-- Customer Contact -->
+                    <dt class="col-sm-3 text-secondary fw-bold mb-3">
+                        @Html.DisplayNameFor(model => model.CustomerContact)
+                    </dt>
+                    <dd class="col-sm-9 text-dark mb-3">
+                        @Html.DisplayFor(model => model.CustomerContact)
+                    </dd>
+
+                    <!-- Linked Event Name -->
+                    <dt class="col-sm-3 text-secondary fw-bold mb-3">
+                        Event
+                    </dt>
+                    <dd class="col-sm-9 text-dark mb-3">
+                        @Html.DisplayFor(model => model.Events.EventName)
+                    </dd>
+
+                    <!-- Linked Venue Name -->
+                    <dt class="col-sm-3 text-secondary fw-bold mb-3">
+                        Venue
+                    </dt>
+                    <dd class="col-sm-9 text-dark mb-3">
+                        @Html.DisplayFor(model => model.Venue.Venuename)
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        <!-- Management Actions Panel -->
+        <div class="d-flex align-items-center gap-3 mt-4 pt-3 border-top border-light">
+            <a asp-action="Edit" asp-route-id="@Model?.Bookingid" class="btn btn-primary px-4 shadow-sm">Edit</a>
+            <a asp-action="Index" class="btn btn-outline-secondary px-4">Back to List</a>
+        </div>
+    </div>
+</div>

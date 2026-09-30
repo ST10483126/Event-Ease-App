@@ -1,0 +1,413 @@
+﻿@model IEnumerable<EventEaseApp.Models.Event>
+
+@{
+    ViewData["Title"] = "Events";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Events</h1>
+        <p class="page-subtitle">Browse and manage all scheduled events</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary btn-create">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        New Event
+    </a>
+</div>
+
+<!-- Filter Form -->
+<!--
+    BOOTSTRAP 5 & CSS REFERENCE:
+    Filter bar layout uses Bootstrap grid and form controls
+    Search icon SVG implementation inspired by Heroicons (2024)
+    Source: Bootstrap Forms Documentation
+    URL: https://getbootstrap.com/docs/5.0/forms/overview/
+-->
+<form asp-action="Index" method="get" class="filter-bar mb-4">
+    <div class="filter-row">
+        <div class="search-inner">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+            </svg>
+            <input type="text" name="searchString" class="form-control search-input"
+                   placeholder="Search by name, description, location..."
+                   value="@ViewBag.CurrentSearch" />
+        </div>
+
+        <select name="eventTypeId" class="form-control filter-select" asp-items="ViewBag.EventTypes">
+            <option value="">All Event Types</option>
+        </select>
+
+        <input type="date" name="dateFrom" class="form-control filter-date"
+               value="@ViewBag.CurrentDateFrom" title="From date" />
+
+        <input type="date" name="dateTo" class="form-control filter-date"
+               value="@ViewBag.CurrentDateTo" title="To date" />
+
+        <button type="submit" class="btn btn-primary filter-btn">Filter</button>
+        <a asp-action="Index" class="btn btn-secondary filter-btn">Clear</a>
+    </div>
+</form>
+
+<div class="table-card">
+    <table class="table table-index">
+        <thead>
+            <tr>
+                <th>Event Name</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th class="actions-col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="8" class="text-center py-5 text-muted">
+                        No events match your filters.
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="fw-bold">@item.EventName</td>
+                        <td>
+                            @if (item.EventType != null)
+                            {
+                                <span class="badge badge-info">@item.EventType.EventTypeName</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">—</span>
+                            }
+                        </td>
+                        <td class="desc-cell">@item.EventDescription</td>
+                        <td class="text-muted">@item.EventTime.ToString("dd MMM yyyy, HH:mm")</td>
+                        <td class="text-muted">@item.EventEndTime?.ToString("dd MMM yyyy, HH:mm")</td>
+                        <td>@item.Location</td>
+                        <td>
+                            @{
+                                var statusClass = item.Status?.ToLower() switch
+                                {
+                                    "scheduled" => "badge badge-info",
+                                    "ongoing" => "badge badge-warning",
+                                    "completed" => "badge badge-success",
+                                    "cancelled" => "badge badge-danger",
+                                    _ => "badge badge-secondary"
+                                };
+                            }
+                            <span class="@statusClass">@item.Status</span>
+                        </td>
+                        <td>
+                            <div class="action-links">
+                                <a asp-action="Edit" asp-route-id="@item.EventId" class="action-link action-edit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                                    Edit
+                                </a>
+                                <a asp-action="Details" asp-route-id="@item.EventId" class="action-link action-details">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                    Details
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.EventId" class="action-link action-delete">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                    Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .page-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.75rem;
+    }
+
+        .page-header h1 {
+            margin-bottom: 0.25rem;
+        }
+
+    .page-subtitle {
+        color: #6b7280;
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    .btn-create {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 10px 20px;
+        font-size: 0.88rem;
+        white-space: nowrap;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+    }
+
+        .btn-create:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, #7b8eed 0%, #8b5db5 100%);
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+    /* Filter bar */
+    .filter-bar {
+        background: white;
+        border-radius: 14px;
+        border: 1px solid rgba(102, 126, 234, 0.12);
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.07);
+        padding: 1rem 1.25rem;
+    }
+
+    .filter-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .search-inner {
+        position: relative;
+        flex: 2;
+        min-width: 200px;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+        pointer-events: none;
+    }
+
+    .search-input {
+        padding-left: 38px !important;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+    }
+
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+    .filter-select {
+        flex: 1;
+        min-width: 150px;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+    }
+
+    .filter-date {
+        flex: 1;
+        min-width: 130px;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+    }
+
+    .filter-btn {
+        white-space: nowrap;
+        padding: 8px 18px;
+        border-radius: 8px;
+    }
+
+    /* Table */
+    .table-card {
+        background: white;
+        border-radius: 16px;
+        border: 1px solid rgba(102, 126, 234, 0.12);
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
+        overflow: hidden;
+    }
+
+    .table-index {
+        margin-bottom: 0;
+        border-radius: 0;
+        box-shadow: none;
+        border: none;
+    }
+
+        .table-index thead th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 0.7rem;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            padding: 13px 16px;
+            font-weight: 600;
+            border-bottom: none;
+        }
+
+        .table-index tbody td {
+            padding: 13px 16px;
+            vertical-align: middle;
+            font-size: 0.88rem;
+        }
+
+        .table-index tbody tr:hover {
+            background-color: #f3e8ff;
+            transition: background-color 0.3s ease;
+        }
+
+    .actions-col {
+        width: 180px;
+    }
+
+    .desc-cell {
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .text-muted {
+        color: #6b7280 !important;
+    }
+
+    /* Badge styling */
+    .badge {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .badge-info {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .badge-warning {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .badge-success {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .badge-danger {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .badge-secondary {
+        background: #e5e7eb;
+        color: #374151;
+    }
+
+    /* Action links */
+    .action-links {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex-wrap: wrap;
+    }
+
+    .action-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 4px 9px;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: background 150ms ease, color 150ms ease;
+        white-space: nowrap;
+    }
+
+    .action-edit {
+        color: #2563eb;
+        background: #eff6ff;
+    }
+
+        .action-edit:hover {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+    .action-details {
+        color: #5b21b6;
+        background: #f0edff;
+    }
+
+        .action-details:hover {
+            background: #ede9fe;
+            color: #4c1d95;
+        }
+
+    .action-delete {
+        color: #dc2626;
+        background: #fff0f0;
+    }
+
+        .action-delete:hover {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .filter-row {
+            flex-direction: column;
+        }
+
+        .search-inner,
+        .filter-select,
+        .filter-date {
+            width: 100%;
+            flex: none;
+        }
+
+        .table-index {
+            font-size: 12px;
+        }
+
+            .table-index thead th,
+            .table-index tbody td {
+                padding: 10px;
+            }
+
+        .page-header {
+            flex-direction: column;
+        }
+
+        .actions-col {
+            width: auto;
+        }
+
+        .desc-cell {
+            max-width: 120px;
+        }
+    }
+</style>

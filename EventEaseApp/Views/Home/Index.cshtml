@@ -1,0 +1,642 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="hero-bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span class="badge-dot"></span>
+            Event Management Platform
+        </div>
+        <h1 class="hero-title">
+            Plan Events.<br />
+            <span class="hero-title-accent">Effortlessly.</span>
+        </h1>
+        <p class="hero-subtitle">
+            EventEase brings your venues, bookings, and events together in one
+            beautifully simple platform — so you can focus on creating experiences
+            that matter.
+        </p>
+        <div class="hero-cta">
+            <a asp-controller="Events" asp-action="Index" class="btn btn-hero-primary">
+                Browse Events
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </a>
+            <a asp-controller="Venues" asp-action="Index" class="btn btn-hero-outline">
+                View Venues
+            </a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-item">
+                <span class="stat-number">50+</span>
+                <span class="stat-label">Venues</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-number">200+</span>
+                <span class="stat-label">Events Hosted</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-number">1k+</span>
+                <span class="stat-label">Happy Guests</span>
+            </div>
+        </div>
+    </div>
+    <div class="hero-visual">
+        <div class="hero-card-stack">
+            <div class="hcard hcard-back">
+                <div class="hcard-label">Upcoming</div>
+                <div class="hcard-title">Summer Gala 2026</div>
+                <div class="hcard-meta">📍 The Grand Hall &nbsp;·&nbsp; 12 Jun</div>
+            </div>
+            <div class="hcard hcard-mid">
+                <div class="hcard-label">Confirmed</div>
+                <div class="hcard-title">Tech Summit</div>
+                <div class="hcard-meta">📍 Rooftop Terrace &nbsp;·&nbsp; 5 Jun</div>
+            </div>
+            <div class="hcard hcard-front">
+                <div class="hcard-icon">🎉</div>
+                <div class="hcard-label">Live Now</div>
+                <div class="hcard-title">Annual Charity Dinner</div>
+                <div class="hcard-meta">📍 Garden Pavilion &nbsp;·&nbsp; Tonight</div>
+                <div class="hcard-pill">120 Guests</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="features-section">
+    <div class="features-header">
+        <p class="section-eyebrow">Everything you need</p>
+        <h2 class="section-heading">Run your events from one place</h2>
+        <p class="section-sub">From discovering venues to confirming bookings — EventEase handles every step of the journey.</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+            </div>
+            <h3 class="feature-title">Event Management</h3>
+            <p class="feature-desc">Create, schedule, and manage events of any size. Track RSVPs and keep everything organised in one timeline view.</p>
+            <a asp-controller="Events" asp-action="Index" class="feature-link">
+                Manage events
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </a>
+        </div>
+        <div class="feature-card feature-card--accent">
+            <div class="feature-icon feature-icon--light">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+            </div>
+            <h3 class="feature-title feature-title--light">Venue Discovery</h3>
+            <p class="feature-desc feature-desc--light">Browse and compare venues with photos, capacity info, and availability — all in one searchable directory.</p>
+            <a asp-controller="Venues" asp-action="Index" class="feature-link feature-link--light">
+                Explore venues
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </a>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+            </div>
+            <h3 class="feature-title">Analytics & Insights</h3>
+            <p class="feature-desc">View real-time statistics, track booking trends, and monitor venue performance with our comprehensive dashboard.</p>
+            <a asp-controller="Home" asp-action="Dashboard" class="feature-link">
+                View dashboard
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Banner -->
+<div class="cta-banner">
+    <div class="cta-content">
+        <h2 class="cta-heading">Ready to begin hosting Events, Create a Booking</h2>
+        <p class="cta-sub">Get started in minutes — no setup required.</p>
+        <a asp-controller="Bookings" asp-action="Create" class="btn btn-hero-primary">
+            Create New Booking
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+        </a>
+    </div>
+</div>
+
+<style>
+    /*
+        CSS GRADIENT REFERENCE:
+        Linear gradient backgrounds for hero section and buttons
+        Inspired by modern web design patterns (Tailwind CSS, 2024)
+        Source: MDN Web Docs - linear-gradient()
+        URL: https://developer.mozilla.org/en-US/docs/Web/CSS/gradient/linear-gradient
+        Accessed: June 2026
+        */
+
+    /*
+        CSS TRANSFORM REFERENCE:
+        Card hover effects using transform and box-shadow
+        Common pattern in modern UI frameworks (Bootstrap cards, 2024)
+        Source: MDN Web Docs - transform
+        URL: https://developer.mozilla.org/en-US/docs/Web/CSS/transform
+        */
+
+    .container {
+        background: transparent;
+        box-shadow: none;
+        padding: 0;
+        margin-top: 0;
+    }
+
+    .hero-section {
+        min-height: 88vh;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 3rem;
+        padding: 5rem 8vw 4rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-bg-shapes {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .shape {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.18;
+    }
+
+    .shape-1 {
+        width: 500px;
+        height: 500px;
+        background: #a78bfa;
+        top: -100px;
+        left: -80px;
+    }
+
+    .shape-2 {
+        width: 400px;
+        height: 400px;
+        background: #818cf8;
+        bottom: -80px;
+        right: 200px;
+    }
+
+    .shape-3 {
+        width: 300px;
+        height: 300px;
+        background: #c4b5fd;
+        top: 30%;
+        right: -50px;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 560px;
+        animation: fadeUp 0.7s cubic-bezier(0.4,0,0.2,1) both;
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255,255,255,0.2);
+        border: 1px solid rgba(255,255,255,0.35);
+        color: white;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 6px 14px;
+        border-radius: 999px;
+        margin-bottom: 1.5rem;
+        backdrop-filter: blur(6px);
+    }
+
+    .badge-dot {
+        width: 7px;
+        height: 7px;
+        background: #86efac;
+        border-radius: 50%;
+        box-shadow: 0 0 0 3px rgba(134,239,172,0.35);
+        animation: pulse 2s infinite;
+    }
+
+    .hero-title {
+        font-size: clamp(2.6rem, 5vw, 3.8rem);
+        font-weight: 800;
+        color: white;
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+        margin-bottom: 1.25rem;
+    }
+
+        .hero-title::after {
+            display: none;
+        }
+
+    .hero-title-accent {
+        background: linear-gradient(135deg, #fde68a, #fbbf24);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero-subtitle {
+        font-size: 1.05rem;
+        color: rgba(255,255,255,0.78);
+        line-height: 1.7;
+        margin-bottom: 2rem;
+        max-width: 480px;
+    }
+
+    .hero-cta {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 2.5rem;
+    }
+
+    .btn-hero-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: white;
+        color: #5b21b6;
+        font-weight: 700;
+        font-size: 0.9rem;
+        padding: 13px 24px;
+        border-radius: 10px;
+        text-decoration: none;
+        transition: transform 200ms ease, box-shadow 200ms ease;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+        letter-spacing: 0.01em;
+    }
+
+        .btn-hero-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(0,0,0,0.22);
+            color: #4c1d95;
+        }
+
+    .btn-hero-outline {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255,255,255,0.1);
+        color: white;
+        font-weight: 600;
+        font-size: 0.9rem;
+        padding: 13px 24px;
+        border-radius: 10px;
+        text-decoration: none;
+        border: 1.5px solid rgba(255,255,255,0.4);
+        transition: background 200ms ease, transform 200ms ease;
+        backdrop-filter: blur(6px);
+    }
+
+        .btn-hero-outline:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+    .hero-stats {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-number {
+        display: block;
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: white;
+        letter-spacing: -0.02em;
+    }
+
+    .stat-label {
+        font-size: 0.72rem;
+        font-weight: 500;
+        color: rgba(255,255,255,0.6);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .stat-divider {
+        width: 1px;
+        height: 36px;
+        background: rgba(255,255,255,0.25);
+    }
+
+    .hero-visual {
+        position: relative;
+        z-index: 1;
+        flex-shrink: 0;
+        animation: fadeUp 0.7s 0.2s cubic-bezier(0.4,0,0.2,1) both;
+    }
+
+    .hero-card-stack {
+        position: relative;
+        width: 300px;
+        height: 340px;
+    }
+
+    .hcard {
+        position: absolute;
+        width: 270px;
+        background: rgba(255,255,255,0.95);
+        border-radius: 18px;
+        padding: 1.25rem 1.4rem;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        backdrop-filter: blur(10px);
+    }
+
+    .hcard-back {
+        transform: rotate(-6deg) translate(-10px, 30px);
+        opacity: 0.55;
+        z-index: 1;
+    }
+
+    .hcard-mid {
+        transform: rotate(-2deg) translate(10px, 15px);
+        opacity: 0.78;
+        z-index: 2;
+    }
+
+    .hcard-front {
+        transform: rotate(2deg);
+        z-index: 3;
+    }
+
+    .hcard-icon {
+        font-size: 1.8rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .hcard-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #7c3aed;
+        margin-bottom: 5px;
+    }
+
+    .hcard-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 6px;
+    }
+
+    .hcard-meta {
+        font-size: 0.78rem;
+        color: #6b7280;
+    }
+
+    .hcard-pill {
+        display: inline-block;
+        margin-top: 10px;
+        background: #f0edff;
+        color: #5b21b6;
+        font-size: 0.72rem;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 999px;
+        letter-spacing: 0.03em;
+    }
+
+    .features-section {
+        background: rgba(255,255,255,0.97);
+        padding: 5rem 8vw;
+    }
+
+    .features-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .section-eyebrow {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #7c3aed;
+        margin-bottom: 0.6rem;
+    }
+
+    .section-heading {
+        font-size: clamp(1.6rem, 3vw, 2.2rem);
+        font-weight: 800;
+        color: #1a1a2e;
+        letter-spacing: -0.025em;
+        margin-bottom: 0.75rem;
+    }
+
+        .section-heading::after {
+            display: none;
+        }
+
+    .section-sub {
+        font-size: 1rem;
+        color: #6b7280;
+        max-width: 520px;
+        margin: 0 auto;
+        line-height: 1.7;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .feature-card {
+        background: #faf9ff;
+        border: 1px solid rgba(102,126,234,0.15);
+        border-radius: 18px;
+        padding: 2rem 1.75rem;
+        transition: transform 250ms ease, box-shadow 250ms ease;
+    }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(102,126,234,0.15);
+        }
+
+    .feature-card--accent {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: transparent;
+    }
+
+    .feature-icon {
+        width: 46px;
+        height: 46px;
+        background: #ede9fe;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #7c3aed;
+        margin-bottom: 1.25rem;
+    }
+
+    .feature-icon--light {
+        background: rgba(255,255,255,0.2);
+        color: white;
+    }
+
+    .feature-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 0.6rem;
+        letter-spacing: -0.01em;
+    }
+
+        .feature-title::after {
+            display: none;
+        }
+
+    .feature-title--light {
+        color: white;
+    }
+
+    .feature-desc {
+        font-size: 0.88rem;
+        color: #6b7280;
+        line-height: 1.7;
+        margin-bottom: 1.25rem;
+    }
+
+    .feature-desc--light {
+        color: rgba(255,255,255,0.78);
+    }
+
+    .feature-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #7c3aed;
+        text-decoration: none;
+        letter-spacing: 0.01em;
+        transition: gap 150ms ease;
+    }
+
+        .feature-link:hover {
+            gap: 10px;
+            color: #5b21b6;
+        }
+
+    .feature-link--light {
+        color: rgba(255,255,255,0.9);
+    }
+
+        .feature-link--light:hover {
+            color: white;
+        }
+
+    .cta-banner {
+        padding: 4.5rem 8vw;
+        text-align: center;
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(8px);
+        border-top: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .cta-heading {
+        font-size: clamp(1.6rem, 3vw, 2.2rem);
+        font-weight: 800;
+        color: white;
+        letter-spacing: -0.025em;
+        margin-bottom: 0.5rem;
+    }
+
+        .cta-heading::after {
+            display: none;
+        }
+
+    .cta-sub {
+        color: rgba(255,255,255,0.7);
+        margin-bottom: 1.75rem;
+        font-size: 1rem;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(28px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes pulse {
+        0%, 100% {
+            box-shadow: 0 0 0 3px rgba(134,239,172,0.35);
+        }
+
+        50% {
+            box-shadow: 0 0 0 6px rgba(134,239,172,0.15);
+        }
+    }
+
+    @@media (max-width: 900px) {
+        .hero-section {
+            flex-direction: column;
+            text-align: center;
+            padding: 4rem 6vw 3rem;
+            min-height: auto;
+        }
+
+        .hero-cta {
+            justify-content: center;
+        }
+
+        .hero-stats {
+            justify-content: center;
+        }
+
+        .hero-subtitle {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-visual {
+            display: none;
+        }
+    }
+
+    @@media (max-width: 600px) {
+        .features-section, .cta-banner {
+            padding: 3rem 5vw;
+        }
+
+        .hero-section {
+            padding: 3.5rem 5vw 2.5rem;
+        }
+    }
+</style>

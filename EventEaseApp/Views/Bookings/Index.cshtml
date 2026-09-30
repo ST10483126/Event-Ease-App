@@ -1,0 +1,524 @@
+﻿@model IEnumerable<EventEaseApp.ViewModels.BookingViewModel>
+
+@{
+    ViewData["Title"] = "Bookings";
+}
+
+<!-- Anti-forgery token for AJAX requests -->
+@Html.AntiForgeryToken()
+
+<div class="page-header">
+    <div>
+        <h1>Bookings</h1>
+        <p class="page-subtitle">Browse and manage all customer bookings</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary btn-create">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        New Booking
+    </a>
+</div>
+
+<!-- Filter Form -->
+<!--
+    BOOTSTRAP 5 & CSS REFERENCE:
+    Filter bar layout uses Bootstrap grid and form controls
+    Search icon SVG implementation inspired by Heroicons (2024)
+    Source: Bootstrap Forms Documentation
+    URL: https://getbootstrap.com/docs/5.0/forms/overview/
+-->
+<form asp-action="Index" method="get" class="filter-bar mb-4">
+    <div class="filter-row">
+        <div class="search-inner">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+            </svg>
+            <input type="text" name="searchString" class="form-control search-input"
+                   placeholder="Search by reference, customer, event..."
+                   value="@ViewBag.CurrentSearch" />
+        </div>
+
+        <input type="text" name="customerName" class="form-control filter-select"
+               placeholder="Customer name"
+               value="@ViewBag.CurrentCustomerName" />
+
+        <input type="date" name="bookingDate" class="form-control filter-date"
+               value="@ViewBag.CurrentBookingDate" title="Filter by booking date" />
+
+        <select name="bookingStatus" class="form-control filter-select" asp-items="ViewBag.Statuses">
+            <option value="">All Statuses</option>
+        </select>
+
+        <label class="availability-toggle">
+            <input type="checkbox" name="bookingAvailable" value="true"
+            @(ViewBag.CurrentAvailable == true ? "checked" : "") />
+            <span>Active only</span>
+        </label>
+
+        <button type="submit" class="btn btn-primary filter-btn">Filter</button>
+        <a asp-action="Index" class="btn btn-secondary filter-btn">Clear</a>
+    </div>
+</form>
+
+<div class="table-card">
+    <table class="table table-index">
+        <thead>
+            <tr>
+                <th>Reference</th>
+                <th>Event</th>
+                <th>Venue</th>
+                <th>Customer</th>
+                <th>Contact</th>
+                <th>Booking Date</th>
+                <th>Status</th>
+                <th>Active</th>
+                <th class="actions-col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="9" class="text-center py-5 text-muted">
+                        No bookings match your filters.
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="fw-bold">
+                            @item.BookingReference                            
+                        </td>
+                        <td>
+                            @item.EventName
+                        </td>
+                        <td>
+                            @item.VenueName
+                        </td>
+                        <td>
+                            @item.CustomerName
+                        </td>
+                        <td>
+                            @item.CustomerContact
+                        </td>
+                        <td>
+                            @item.BookingDate?.ToString("dd MMM yyyy")
+                        </td>
+                        <td>
+                            @{
+                                var statusClass = item.BookingStatus?.ToLower() switch
+                                {
+                                    "confirmed" => "badge badge-success",
+                                    "pending" => "badge badge-warning",
+                                    "cancelled" => "badge badge-danger",
+                                    "completed" => "badge badge-info",
+                                    _ => "badge badge-secondary"
+                                };
+                            }
+                            <span class="@statusClass">@item.BookingStatus</span>
+                        </td>
+                        <td>
+                            <label class="toggle-switch">
+                                <input type="checkbox" class="availability-checkbox" data-id="@item.BookingId" @(item.IsAvailable ? "checked" : "") />
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </td>
+                        <td>
+                            <div class="action-links">
+                                <a asp-action="Edit" asp-route-id="@item.BookingId" class="action-link action-edit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                                    Edit
+                                </a>
+                                <a asp-action="Details" asp-route-id="@item.BookingId" class="action-link action-details">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                    Details
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.BookingId" class="action-link action-delete">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                    Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- JavaScript for Toggle Switch -->
+<script>
+    // Get anti-forgery token from the page
+    var antiForgeryToken = '';
+    var tokenInput = document.querySelector('input[name="__RequestVerificationToken"]');
+    if (tokenInput) {
+        antiForgeryToken = tokenInput.value;
+    }
+
+    document.querySelectorAll('.availability-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', async function() {
+            const bookingId = this.dataset.id;
+            const isChecked = this.checked;
+            const checkboxElement = this;
+
+            try {
+                const response = await fetch(`/Bookings/ToggleAvailability/${bookingId}?isAvailable=${isChecked}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': antiForgeryToken
+                    }
+                });
+
+                if (!response.ok) {
+                    checkboxElement.checked = !isChecked;
+                    const errorText = await response.text();
+                    alert('Failed to update availability: ' + response.status);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                checkboxElement.checked = !isChecked;
+                alert('An error occurred: ' + error.message);
+            }
+        });
+    });
+</script>
+
+<style>
+    .page-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.75rem;
+    }
+
+        .page-header h1 {
+            margin-bottom: 0.25rem;
+        }
+
+    .page-subtitle {
+        color: #6b7280;
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    .btn-create {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 10px 20px;
+        font-size: 0.88rem;
+        white-space: nowrap;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+    }
+
+        .btn-create:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, #7b8eed 0%, #8b5db5 100%);
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+    /* Filter bar */
+    .filter-bar {
+        background: white;
+        border-radius: 14px;
+        border: 1px solid rgba(102, 126, 234, 0.12);
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.07);
+        padding: 1rem 1.25rem;
+    }
+
+    .filter-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .search-inner {
+        position: relative;
+        flex: 2;
+        min-width: 200px;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+        pointer-events: none;
+    }
+
+    .search-input {
+        padding-left: 38px !important;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+    }
+
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+    .filter-select {
+        flex: 1;
+        min-width: 150px;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+    }
+
+    .filter-date {
+        flex: 1;
+        min-width: 150px;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+    }
+
+    .filter-btn {
+        white-space: nowrap;
+        padding: 8px 18px;
+        border-radius: 8px;
+    }
+
+    .availability-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #4b5563;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+
+        .availability-toggle input[type="checkbox"] {
+            width: 15px;
+            height: 15px;
+            accent-color: #667eea;
+            cursor: pointer;
+        }
+
+    /* Table */
+    .table-card {
+        background: white;
+        border-radius: 16px;
+        border: 1px solid rgba(102, 126, 234, 0.12);
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
+        overflow: hidden;
+    }
+
+    .table-index {
+        margin-bottom: 0;
+        border-radius: 0;
+        box-shadow: none;
+        border: none;
+    }
+
+        .table-index thead th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 0.7rem;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            padding: 13px 16px;
+            font-weight: 600;
+            border-bottom: none;
+        }
+
+        .table-index tbody td {
+            padding: 13px 16px;
+            vertical-align: middle;
+            font-size: 0.88rem;
+        }
+
+        .table-index tbody tr:hover {
+            background-color: #f3e8ff;
+            transition: background-color 0.3s ease;
+        }
+
+    .actions-col {
+        width: 180px;
+    }
+
+    .text-muted {
+        color: #6b7280 !important;
+    }
+
+    /* Badge styling */
+    .badge {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .badge-success {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .badge-warning {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .badge-danger {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .badge-info {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .badge-secondary {
+        background: #e5e7eb;
+        color: #374151;
+    }
+
+    /* Toggle Switch Styles */
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+    }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        border-radius: 24px;
+        transition: 0.3s;
+    }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+    input:checked + .toggle-slider {
+        background-color: #667eea;
+    }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+    /* Action links */
+    .action-links {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex-wrap: wrap;
+    }
+
+    .action-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 4px 9px;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: background 150ms ease, color 150ms ease;
+        white-space: nowrap;
+    }
+
+    .action-edit {
+        color: #2563eb;
+        background: #eff6ff;
+    }
+
+        .action-edit:hover {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+    .action-details {
+        color: #5b21b6;
+        background: #f0edff;
+    }
+
+        .action-details:hover {
+            background: #ede9fe;
+            color: #4c1d95;
+        }
+
+    .action-delete {
+        color: #dc2626;
+        background: #fff0f0;
+    }
+
+        .action-delete:hover {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .filter-row {
+            flex-direction: column;
+        }
+
+        .search-inner,
+        .filter-select,
+        .filter-date {
+            width: 100%;
+            flex: none;
+        }
+
+        .table-index {
+            font-size: 12px;
+        }
+
+            .table-index thead th,
+            .table-index tbody td {
+                padding: 10px;
+            }
+
+        .page-header {
+            flex-direction: column;
+        }
+
+        .actions-col {
+            width: auto;
+        }
+    }
+</style>

@@ -1,0 +1,497 @@
+﻿@model EventEaseApp.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Admin Dashboard</h1>
+        <p>Welcome to your EventEase management overview</p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number">@Model.TotalVenues</div>
+            <div class="stat-label">Total Venues</div>
+            <div class="stat-sub">@Model.AvailableVenues available</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">@Model.TotalEvents</div>
+            <div class="stat-label">Total Events</div>
+            <div class="stat-sub">@Model.UpcomingEvents.Count upcoming</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">@Model.TotalBookings</div>
+            <div class="stat-label">Total Bookings</div>
+            <div class="stat-sub">@Model.ActiveBookings active</div>
+        </div>
+    </div>
+
+    <!-- Booking Status Row -->
+    <div class="status-row">
+        <div class="status-card pending">
+            <span>Pending</span>
+            <strong>@Model.PendingBookings</strong>
+        </div>
+        <div class="status-card confirmed">
+            <span>Confirmed</span>
+            <strong>@Model.ConfirmedBookings</strong>
+        </div>
+        <div class="status-card completed">
+            <span>Completed</span>
+            <strong>@Model.CompletedBookings</strong>
+        </div>
+        <div class="status-card cancelled">
+            <span>Cancelled</span>
+            <strong>@Model.CancelledBookings</strong>
+        </div>
+    </div>
+
+    <!-- Two Column Layout -->
+    <div class="dashboard-two-col">
+        <!-- Left Column: Upcoming Events Cards -->
+        <div class="left-col">
+            <div class="dashboard-card">
+                <h3>Upcoming Events (Next 30 Days)</h3>
+                @if (Model.UpcomingEvents.Any())
+                {
+                    <div class="event-cards">
+                        @foreach (var e in Model.UpcomingEvents)
+                        {
+                            <div class="event-card-item">
+                                <div class="event-date-box">
+                                    <span class="event-day">@e.EventTime.ToString("dd")</span>
+                                    <span class="event-month">@e.EventTime.ToString("MMM")</span>
+                                </div>
+                                <div class="event-info">
+                                    <h4>@e.EventName</h4>
+                                    <p>@e.Location</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="empty-message">No upcoming events in the next 30 days.</p>
+                }
+            </div>
+        </div>
+
+        <!-- Right Column: Popular Venues & Monthly Trend -->
+        <div class="right-col">
+            <!-- Popular Venues -->
+            <div class="dashboard-card">
+                <h3>Most Popular Venues</h3>
+                @if (Model.PopularVenues.Any())
+                {
+                    <div class="popular-list">
+                        @foreach (var v in Model.PopularVenues)
+                        {
+                            <div class="popular-item">
+                                <span class="popular-name">@v.VenueName</span>
+                                <span class="popular-count">@v.BookingCount bookings</span>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="empty-message">No venue booking data available.</p>
+                }
+            </div>
+
+            <!-- Monthly Trend -->
+            <div class="dashboard-card">
+                <h3>Monthly Booking Trend</h3>
+                <div class="trend-bars">
+                    @foreach (var m in Model.MonthlyTrend)
+                    {
+                        <div class="trend-item">
+                            <span class="trend-label">@m.MonthName</span>
+                            <div class="trend-bar-container">
+                                <div class="trend-bar" style="width: @(Math.Min(100, m.Count * 2))%"></div>
+                            </div>
+                            <span class="trend-count">@m.Count</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Bookings Section (Cards instead of Table) -->
+    <div class="dashboard-card full-width">
+        <h3>Recent Bookings (Last 7 Days)</h3>
+        @if (Model.RecentBookings.Any())
+        {
+            <div class="bookings-cards">
+                @foreach (var b in Model.RecentBookings)
+                {
+                    <div class="booking-card-item">
+                        <div class="booking-ref">@b.Bookingreference</div>
+                        <div class="booking-customer">@b.CustomerName</div>
+                        <div class="booking-venue">@b.Venue?.Venuename</div>
+                        <div class="booking-date">@b.BookingDate?.ToString("dd MMM yyyy")</div>
+                        <div class="booking-status">
+                            <span class="status-badge @b.BookingStatus?.ToLower()">@b.BookingStatus</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="empty-message">No bookings in the last 7 days.</p>
+        }
+    </div>
+</div>
+
+<style>
+    .dashboard-container {
+        padding: 2rem;
+        background: #f8fafc;
+        min-height: 100vh;
+    }
+
+    .dashboard-header {
+        margin-bottom: 2rem;
+    }
+
+        .dashboard-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 0.25rem;
+        }
+
+        .dashboard-header p {
+            color: #6b7280;
+        }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        transition: transform 0.2s ease;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #5b21b6;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #4b5563;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+
+    .stat-sub {
+        font-size: 0.7rem;
+        color: #9ca3af;
+        margin-top: 0.25rem;
+    }
+
+    .status-row {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .status-card {
+        flex: 1;
+        background: white;
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .status-card span {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .status-card strong {
+            font-size: 1.2rem;
+        }
+
+        .status-card.pending {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .status-card.confirmed {
+            border-left: 4px solid #10b981;
+        }
+
+        .status-card.completed {
+            border-left: 4px solid #3b82f6;
+        }
+
+        .status-card.cancelled {
+            border-left: 4px solid #ef4444;
+        }
+
+    .dashboard-two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .dashboard-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .full-width {
+        width: 100%;
+    }
+
+    .dashboard-card h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #ede9fe;
+    }
+
+    /* Event Cards */
+    .event-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .event-card-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem;
+        background: #faf9ff;
+        border-radius: 12px;
+        transition: background 0.2s ease;
+    }
+
+        .event-card-item:hover {
+            background: #f3e8ff;
+        }
+
+    .event-date-box {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+
+    .event-day {
+        font-size: 1.2rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .event-month {
+        font-size: 0.65rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .event-info h4 {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 0.2rem;
+    }
+
+    .event-info p {
+        font-size: 0.75rem;
+        color: #6b7280;
+    }
+
+    /* Bookings Cards (No Table) */
+    .bookings-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .booking-card-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1rem;
+        background: #faf9ff;
+        border-radius: 12px;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .booking-ref {
+        font-weight: 700;
+        color: #5b21b6;
+        font-size: 0.8rem;
+    }
+
+    .booking-customer {
+        font-weight: 600;
+        color: #1a1a2e;
+        font-size: 0.8rem;
+    }
+
+    .booking-venue {
+        color: #6b7280;
+        font-size: 0.75rem;
+    }
+
+    .booking-date {
+        color: #6b7280;
+        font-size: 0.7rem;
+    }
+
+    .status-badge {
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+
+        .status-badge.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-badge.confirmed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-badge.completed {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-badge.cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+    .popular-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .popular-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .popular-name {
+        font-weight: 600;
+        color: #374151;
+    }
+
+    .popular-count {
+        font-size: 0.75rem;
+        color: #7c3aed;
+        font-weight: 600;
+    }
+
+    .trend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .trend-label {
+        width: 65px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: #6b7280;
+    }
+
+    .trend-bar-container {
+        flex: 1;
+        height: 24px;
+        background: #f3f4f6;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .trend-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 12px;
+        transition: width 0.3s ease;
+    }
+
+    .trend-count {
+        width: 35px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: #374151;
+        text-align: right;
+    }
+
+    .empty-message {
+        text-align: center;
+        padding: 2rem;
+        color: #9ca3af;
+        font-size: 0.8rem;
+    }
+
+    @@media (max-width: 768px) {
+        .dashboard-two-col {
+            grid-template-columns: 1fr;
+        }
+
+        .dashboard-container {
+            padding: 1rem;
+        }
+
+        .stats-grid {
+            gap: 0.75rem;
+        }
+
+        .booking-card-item {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>

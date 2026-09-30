@@ -1,0 +1,87 @@
+﻿@model EventEaseApp.Models.Venue
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="container my-4">
+    <div class="card border-0 shadow-sm p-4 bg-white">
+        <h1 class="text-primary fw-bold mb-4">Edit Venue</h1>
+
+        <!-- enctype="multipart/form-data" is required to allow file uploads to Azurite blob storage -->
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Venueid" />
+
+            <!-- Venue Name -->
+            <div class="mb-3">
+                <label asp-for="Venuename" class="form-label fw-bold text-secondary"></label>
+                <input asp-for="Venuename" class="form-control shadow-sm" />
+                <span asp-validation-for="Venuename" class="text-danger"></span>
+            </div>
+
+            <!-- Address -->
+            <div class="mb-3">
+                <label asp-for="Address" class="form-label fw-bold text-secondary"></label>
+                <input asp-for="Address" class="form-control shadow-sm" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <!-- Capacity -->
+            <div class="mb-3">
+                <label asp-for="Capacity" class="form-label fw-bold text-secondary"></label>
+                <input asp-for="Capacity" class="form-control shadow-sm" type="number" />
+                <span asp-validation-for="Capacity" class="text-danger"></span>
+            </div>
+
+            <!-- Location -->
+            <div class="mb-3">
+                <label asp-for="Location" class="form-label fw-bold text-secondary"></label>
+                <input asp-for="Location" class="form-control shadow-sm" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+
+            <!-- Availability Status Toggle -->
+            <div class="mb-3">
+                <label asp-for="IsAvailable" class="form-label fw-bold text-secondary">Availability Status</label>
+                <select asp-for="IsAvailable" class="form-control shadow-sm">
+                    <option value="true">Available</option>
+                    <option value="false">Unavailable</option>
+                </select>
+                <span asp-validation-for="IsAvailable" class="text-danger"></span>
+                <small class="text-muted d-block mt-1">Set whether this venue is currently available for booking</small>
+            </div>
+
+            <!-- Current Image Display -->
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <div class="mb-3">
+                    <label class="form-label fw-bold text-secondary">Current Image</label>
+                    <div>
+                        <img src="@Model.ImageUrl" class="img-thumbnail shadow-sm" style="width: 150px; height: 150px; object-fit: cover;" alt="Venue Image" />
+                    </div>
+                </div>
+            }
+
+            <!-- Image upload field — file is sent to BlobService and saved to the venue-images container -->
+            <div class="mb-4">
+                <label class="form-label fw-bold text-secondary">Replace Image (Optional)</label>
+                <input type="file" name="imageFile" class="form-control shadow-sm" accept="image/*" />
+                <span class="text-danger small">@ViewData["ImageError"]</span>
+                <small class="text-muted d-block mt-1">Leave empty to keep the current image</small>
+            </div>
+
+            <!-- Form Submissions Actions -->
+            <div class="d-flex align-items-center gap-3 mt-4">
+                <button type="submit" class="btn btn-primary px-4 shadow-sm">Save</button>
+                <a asp-action="Index" class="btn btn-outline-secondary px-4">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
